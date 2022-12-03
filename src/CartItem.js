@@ -3,36 +3,6 @@ import React from 'react';
 class CartItem extends React.Component {
 
    
-
-
-    increaseQuantity = () => {
-        console.log('this', this.state);
-        // this.setState({
-        //    qty: this.state.qty+1,
-        // })
-
-        // if prevState is require thdn
-        this.setState((prevState)=>{
-            return {
-             qty:prevState.qty+1
-            }
-         })
-      }
-       
-    decreaseQuantity = () => {
-        console.log('this', this.state);
-        // from 1
-        // this.setState({
-        //    qty: this.state.qty-1,
-        // })
-        // form 2
-        this.setState((prevState)=>{
-           return {
-            qty:prevState.qty-1
-           }
-        })
-      }
-
     render() {
         const {price ,title,qty}=this.props.product;
         console.log(this.props)
@@ -51,13 +21,13 @@ class CartItem extends React.Component {
                 src="https://cdn-icons-png.flaticon.com/512/992/992651.png"
                 alt="increase" 
                 className="action-icons"
-                onClick={this.increaseQuantity}
+                onClick={()=> this.props.onIncreaseQuantity(this.props.product)}
                 />
                 <img 
                 src="https://cdn-icons-png.flaticon.com/512/992/992683.png" 
                 alt="decrease" 
                 className="action-icons" 
-                onClick={this.decreaseQuantity}
+                onClick={()=> this.props.onDecreaseQuantity(this.props.product)}
                 />
                 <img src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png" alt="delete" className="action-icons" />
             </div>

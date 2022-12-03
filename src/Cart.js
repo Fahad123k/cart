@@ -1,6 +1,7 @@
 import React from 'react';
 import CartItem from './CartItem';
 class Cart extends React.Component {
+
     constructor (){
         super();
         this.state={
@@ -31,6 +32,25 @@ class Cart extends React.Component {
         
     }
 
+    handleIncreseQuantity=(product)=>{
+        console.log("hey plz increase quantity",product);
+        const {products} =this.state;
+        const index=products.indexOf(product);
+        products[index].qty+=1;
+        this.setState({
+            products
+        })
+    }
+
+    handleDecreseQuantity=(product)=>{
+        const {products} =this.state;
+        const index=products.indexOf(product);
+        products[index].qty-=1;
+        this.setState({
+            products
+        })
+    }
+
     render() {
         const { products } = this.state;
         
@@ -42,6 +62,8 @@ class Cart extends React.Component {
                     <CartItem
                     product={product}
                     key={product.id}
+                    onIncreaseQuantity={this.handleIncreseQuantity}
+                    onDecreaseQuantity={this.handleDecreseQuantity}
                     />
                   )
                 })
