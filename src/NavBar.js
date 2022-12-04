@@ -5,7 +5,7 @@ const NavBar = (props) => {
         <div style={styles.nav}>
             <div style={styles.cartIconContainer}>
                 <img style={styles.cartIcon} src="https://cdn-icons-png.flaticon.com/512/3144/3144456.png" alt="" />
-                <span style={styles.cartCount}>3</span>
+                <span style={styles.cartCount}>{props.count}</span>
             </div>
         </div>
     )
@@ -33,7 +33,8 @@ const styles = {
         padding: '4px 8px',
         position: 'absolute',
         right: 0,
-        top: -9
+        top: -9,
+        // animation: 'shakeCart .4s ease-in-out '
     }
 };
 
