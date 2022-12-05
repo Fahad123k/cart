@@ -1,88 +1,70 @@
 import React from 'react';
 import Cart from './Cart';
 import Navbar from './NavBar';
+// import Products  from './Products'
 
-class App extends React.Component {
+import { useState, useEffect } from 'react'
+import { db } from "./firebase_config";
+import {
+    collection, getDocs
+} from 'firebase/firestore'
 
-  constructor () {
-    super();
-    this.state = {
-      products: [
-        {
-          price: 99,
-          title: 'Watch',
-          qty: 1,
-          img: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
-          id: 1
-        },
-        {
-          price: 750,
-          title: 'Mobile Phone',
-          qty: 10,
-          img: 'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80',
-          id: 2
-        },
-        {
-          price: 950,
-          title: 'Laptop',
-          qty: 4,
-          img: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80',
-          id: 3
-        }
-      ]
-    }
-    // this.increaseQuantity = this.increaseQuantity.bind(this);
-    // this.testing();
-  }
-  handleIncreaseQuantity = (product) => {
-    console.log('Heyy please inc the qty of ', product);
-    const { products } = this.state;
-    const index = products.indexOf(product);
 
-    products[index].qty += 1;
+export default function App()  {
 
-    this.setState({
-      products
-    })
-  }
-  handleDecreaseQuantity = (product) => {
-    console.log('Heyy please inc the qty of ', product);
-    const { products } = this.state;
-    const index = products.indexOf(product);
+ 
 
-    if (products[index].qty === 0) {
-      return;
-    }
+  // handleIncreaseQuantity = (product) => {
+  //   console.log('Heyy please inc the qty of ', product);
+  //   const { products } = this.state;
+  //   const index = products.indexOf(product);
 
-    products[index].qty -= 1;
+  //   products[index].qty += 1;
 
-    this.setState({
-      products
-    })
-  }
-  handleDeleteProduct = (id) => {
-    const { products } = this.state;
+  //   this.setState({
+  //     products
+  //   })
+  // }
+  // handleDecreaseQuantity = (product) => {
+  //   console.log('Heyy please inc the qty of ', product);
+  //   const { products } = this.state;
+  //   const index = products.indexOf(product);
 
-    const items = products.filter((item) => item.id !== id); // [{}]
+  //   if (products[index].qty === 0) {
+  //     return;
+  //   }
 
-    this.setState({
-      products: items
-    })
-  }
+  //   products[index].qty -= 1;
 
-  getCartCount = () => {
-    const { products } = this.state;
+  //   this.setState({
+  //     products
+  //   })
+  // }
+  // handleDeleteProduct = (id) => {
+  //   const { products } = this.state;
 
-    let count = 0;
+  //   const items = products.filter((item) => item.id !== id); // [{}]
+
+  //   this.setState({
+  //     products: items
+  //   })
+  // }
+
+  // getCartCount = () => {
+  //   const { products } = this.state;
+
+  //   let count = 0;
     
-    products.forEach((product) => {
-      count += product.qty;
-    })
+  //   products.forEach((product) => {
+  //     count += product.qty;
+  //   })
     
-    return count;
-  }
+  //   return count;
+  // }
 
-  getCartTotal = () => {
+
+
+  function getCartTotal () {
     const { products } = this.state;
     
     let cartTotal = 0;
@@ -98,23 +80,37 @@ class App extends React.Component {
     return cartTotal;
   }
 
-  render () {
-    const { products } = this.state;
+
+    // const { products } = this.state;
+    const [products, setproducts] = useState([]);
+    const productsCollectionRef = collection(db, "products");
+       // use effect to get user after loading page
+       useEffect(() => {
+        // like api fetching
+        const getProducts = async () => {
+            const data = await getDocs(productsCollectionRef);
+            setproducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        }
+        getProducts();
+    }, []);
+
+
     return (
       <div className="App">
-        <Navbar count={this.getCartCount()} />
+        {/* <Navbar /> */}
+        <Navbar count={getCartCount()} />
         <Cart
           products={products}
-          onIncreaseQuantity={this.handleIncreaseQuantity}
-          onDecreaseQuantity={this.handleDecreaseQuantity}
-          onDeleteProduct={this.handleDeleteProduct}
+          // onIncreaseQuantity={this.handleIncreaseQuantity}
+          // onDecreaseQuantity={this.handleDecreaseQuantity}
+          // onDeleteProduct={this.handleDeleteProduct}
         />
         <div className="totalCartPrice" style={{fontSize:20,padding:10}}>
-          Total: {this.getCartTotal()}
+          {/* Total: {this.getCartTotal()} */}
         </div>
+
+        {/* <Products/> */}
       </div>
     );
   }
-}
 
-export default App;
